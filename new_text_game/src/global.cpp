@@ -2,6 +2,7 @@
 #include<string>
 #include<chrono>
 #include<thread>
+#include"global.h"
 
 //this is for functions that ill need anywhere
 
