@@ -26,28 +26,45 @@ struct item_component
     bool is_drinkable;
     bool is_liquid;
     int calories;//later after a long time i want different vitamins and detailed nutrients
-    int amount_of_liquid;//foods can have liquid in them
+    double amount_of_liquid;//foods can have liquid in them
     bool is_flamable;
 };
 
 
-// not in use now
 struct item
 {
-    std::string name_test;
+    std::string name;
 
     bool is_edible;
+    bool is_wearable;
+
+    std::vector<item_component> components;
 };
 
+// //not in use now
+// struct container
+// {
+//     int size;//in liters
 
-item get_item_id(int id);
+//     int weight;// in kilos but will have settings for pounds (lb)
+
+//     std::vector<item> items;
+// };
+
+// //not in use now
+// struct cloths
+// {
+//     std::vector<container> pockets;
+// };
 
 
-// not in use now
-struct inventory
-{
-    std::vector<item> items;
-};
+// // not in use now
+// struct inventory
+// {
+//     std::vector<container> containers;
+// };
+//     // player.inventory.containers.reserve(1);
+
 
 //values being set for me is temporary
 struct character
@@ -55,9 +72,12 @@ struct character
     std::string first_name = "lunar";//values being set for me is temporary
     std::string last_name = "eclipse";//values being set for me is temporary
     int age = 16;//values being set for me is temporary
-    int tiredness;
+    int tiredness;// scale up to 100 shouldnt pass 20
     int calories;//7700 in 1KG of fat and 2000-2200 for average adult 
     int thirst;//im thinking simple 0-100
+    std::vector<item> inventory;
+
+    // std::vector<body_part> body_part;//this is just an idea for now
 };
 
 struct world_time{
@@ -80,13 +100,6 @@ struct world_time{
         else if (type_of_time == "weeks"){weeks += amount;}
         else if (type_of_time == "months"){months += amount;}
         else if (type_of_time == "years"){years += amount;}
-
-        // while (seconds >= 60){seconds -= 60;minutes++;}
-        // while (minutes >= 60){minutes -= 60;hours++;}
-        // while (hours >= 24){hours -= 24;days++;}
-        // while (days >= 7){days -= 7;weeks++;}
-        // while (weeks >= 4){weeks -= 4;months++;}
-        // while (months >= 12){months -= 12;years++;}
 
         while (seconds > 59){seconds -= 60;minutes++;}
         while (minutes > 59){minutes -= 60;hours++;}
@@ -185,6 +198,7 @@ struct world_time{
 
 };
 
+//not started
 struct bunker
 {
     
@@ -198,11 +212,35 @@ int random_num_gen(int limit);
 
 int set_character_values(character player);
 
+int use_item_menu(item item);
+
+
+
 struct game
 {
+
+    
+    item_component bread;
+
+    item sandwich;
     
 
-    //idk why tf i wrote this like this
+    int init_items(){
+        
+        bread.is_edible = true;
+        bread.is_drinkable = false;
+        bread.amount_of_liquid = 0;//ml or L?
+
+
+        sandwich.components.reserve(12);
+
+        sandwich.components = {bread};
+
+        return 0;
+    }
+
+
+
     std::string choose_action(character player,world_time time,bunker home_base){
         // std::string answer;
         // std::cin >> answer;
@@ -237,16 +275,51 @@ struct game
             if(answer == "sleep"){
                 
                 clear();
-                time.pass_time("minutes",((use_simple_menu(sleep_menu)) * 60) + (random_num_gen(30) - 15));
+                int minutes_to_pass (use_simple_menu(sleep_menu));
+
+                if (!minutes_to_pass == 0)
+                {
+                    time.pass_time("minutes",(minutes_to_pass * 60) + (random_num_gen(30) - 15));
+                }
+
                 clear();
                 time.print_time(true);
                 // time.print_date(1);
                 time.print_long_date();
+                std::cout << "\npress any key to continue\n";
                 getch();
             }
+            else if (answer == "use item")
+            {
+                simple_menu item_menu;
+                item_menu.statment = "what item will you use";
+                item_menu.menu_options_offset = 3;
+                item_menu.options.resize(9);
+
+
+                player.inventory.resize(8);
+                for (size_t i = 0; i < player.inventory.size(); i++)
+                {
+                    player.inventory[i].name = "test";
+                    std::cout << player.inventory[i].name;
+                    // item_menu.options[i] = player.inventory[i].name;//causes errors
+
+                }
+
+                int answer = use_simple_menu(item_menu);
+                use_item_menu(player.inventory[use_simple_menu(item_menu)]);
+
+
+                getch();
+                clear();
+                
+            }
+            
 
         }
         
     }
 
 };
+
+

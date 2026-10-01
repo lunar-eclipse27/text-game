@@ -9,12 +9,12 @@ int main(){
     character player;
     world_time time;
     bunker base;
-    
-    item sandwich;
-    
-    set_character_values(player);
+
+
+    player.inventory.reserve(12);
 
     game game;
+    game.init_items();
     game.play_game(player,time,base);
 
 

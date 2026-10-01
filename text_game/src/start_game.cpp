@@ -1,11 +1,6 @@
 #include<iostream>
 #include"global.h"
 
-int init_items(){
-
-
-    return 0;
-}
 
 int set_character_values(character player){
 

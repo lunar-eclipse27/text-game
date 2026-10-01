@@ -12,6 +12,7 @@ std::cout << "\033[" << y << ";" << x << "H";
 
 int use_simple_menu(simple_menu menu){
 
+    clear();
     
     std::cout << menu.statment;
     for (size_t i = 0; i < menu.options.size(); i++)
@@ -77,3 +78,32 @@ int use_simple_menu(simple_menu menu){
     }
     return menu.selected;
 };
+
+
+int use_item_menu(item item){
+
+    simple_menu item_menu;
+    item_menu.statment = "what will you do with the " + item.name;
+    item_menu.menu_options_offset = 3;
+    
+    item_menu.options.reserve(10);
+
+    int i = 0;
+    if (item.is_edible == true)
+    {
+        item_menu.options[i] = "eat";
+        i++;
+    }
+    if (item.is_wearable == true)
+    {
+        item_menu.options[i] = "wear";
+        i++;
+    }
+    item_menu.options[i] = "dissasemble";
+    i++;
+    
+
+    
+
+    return 0;
+}
